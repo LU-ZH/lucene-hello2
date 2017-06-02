@@ -71,9 +71,9 @@ public class IndexDaoImpTest extends TestCase {
         String queryString = "国家";
 
         //执行搜索
-//        PageResult pageResult = indexDao.selectArticle(queryString, 0, 10);
+        PageResult pageResult = indexDao.selectArticle(queryString, 0, 10);
 //        PageResult pageResult = indexDao.selectArticle(queryString, 10, 10);
-        PageResult pageResult = indexDao.selectArticle(queryString, 20, 10);
+//        PageResult pageResult = indexDao.selectArticle(queryString, 20, 10);
 
         for (Article a : (List<Article>) pageResult.getList())
             System.out.println("id:" + a.getId() + " title:" + a.getTitle() + " content:" + a.getContent());

@@ -29,21 +29,11 @@ public class IndexDaoImp implements IndexDao {
         Document document = ArticleDocumentUtil.articleToDocument(article);
 
         //2.添加到索引库中
-        IndexWriter indexWriter = null;
         try {
-            indexWriter = new IndexWriter(LuceneUtil.getDirectory(), LuceneUtil.getAnalyzer(), IndexWriter.MaxFieldLength.LIMITED);
-            indexWriter.addDocument(document);//添加
+            LuceneUtil.getIndexWriter().addDocument(document);//添加
+            LuceneUtil.getIndexWriter().commit();//提交更改
         } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            //关闭IndexWriter
-            if (indexWriter != null) {
-                try {
-                    indexWriter.close();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
         }
     }
 
@@ -55,45 +45,25 @@ public class IndexDaoImp implements IndexDao {
      * @param id
      */
     public void deleteArticle(Integer id) {
-        IndexWriter indexWriter = null;
         try {
             String idStr = NumericUtils.intToPrefixCoded(id);
             Term term = new Term("id", idStr);//一定要使用工具类将数字转为字符串
-            indexWriter = new IndexWriter(LuceneUtil.getDirectory(), LuceneUtil.getAnalyzer(), IndexWriter.MaxFieldLength.LIMITED);
-            indexWriter.deleteDocuments(term);//删除所有含有这个term的document
+            LuceneUtil.getIndexWriter().deleteDocuments(term);//删除所有含有这个term的document
+            LuceneUtil.getIndexWriter().commit();
         } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            //关闭IndexWriter
-            if (indexWriter != null) {
-                try {
-                    indexWriter.close();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
         }
     }
 
     public void updateArticle(Article article) {
-        IndexWriter indexWriter = null;
         try {
             Term term = new Term("id", NumericUtils.intToPrefixCoded(article.getId()));//一定要使用工具类将数字转为字符串
             Document doc = ArticleDocumentUtil.articleToDocument(article);
 
-            indexWriter = new IndexWriter(LuceneUtil.getDirectory(), LuceneUtil.getAnalyzer(), IndexWriter.MaxFieldLength.LIMITED);
-            indexWriter.updateDocument(term, doc);// 更新就是先参数再添加
+            LuceneUtil.getIndexWriter().updateDocument(term, doc);// 更新就是先参数再添加
+            LuceneUtil.getIndexWriter().commit();
         } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            //关闭IndexWriter
-            if (indexWriter != null) {
-                try {
-                    indexWriter.close();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
         }
     }
 
