@@ -48,7 +48,7 @@ public class IndexDaoImpTest extends TestCase {
 
     @Test
     public void testDeleteArticle() throws Exception {
-        indexDao.deleteArticle(2);
+        indexDao.deleteArticle(3);
     }
 
     @Test
